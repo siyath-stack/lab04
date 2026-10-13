@@ -63,7 +63,16 @@ function activateButton(){
  * @return {number[]} an array of Quarters, Dimes, Nickels and any remaining Cents.
  */
 function calcChange( number ) {
-    /* write your code here! */
+    let quarters = 0;
+    let dimes = 0;
+    let nickels = 0;
+    let remaining = number;
+
+    [quarters, remaining] = calcCoins("quarters", remaining);
+    [dimes, remaining] = calcCoins("dimes", remaining);
+    [nickels, remaining] = calcCoins("nickels", remaining);
+
+    return [quarters, dimes, nickels, remaining];
 }
 
 /**
@@ -75,7 +84,7 @@ function calcChange( number ) {
  * @return {boolean} true if input is multiple of 4 or 7, else false.
  */
 function isPositiveMultipleOf4Or7(n) {   
-        /* write your code here! */
+    return n > 0 && (n % 4 === 0 || n % 7 === 0);
 }
 
 /**
@@ -87,7 +96,19 @@ function isPositiveMultipleOf4Or7(n) {
  * @return {number} the number of bits required to represent the input.
  */
 function bits(number) {
-    /* write your code here! */
+    if (number <= 0) {
+        return 0;
+    }
+
+    let count = 0;
+    let value = number;
+
+    while (value > 0) {
+        value = Math.floor(value / 2);
+        count++;
+    }
+
+    return count;
 }
 
 /**
@@ -108,7 +129,10 @@ function bits(number) {
  * @return {string} output string in the form "X am" or "X pm", where X is between 1 and 12.
  */
 function currHour(elapsedMinutes) {
-    /* write your code here! */
+    const totalHours = Math.floor(elapsedMinutes / 60);
+    const hour = totalHours % 12 === 0 ? 12 : totalHours % 12;
+    const suffix = totalHours % 24 < 12 ? "pm" : "am";
+    return hour.toString() + " " + suffix;
 }
 
 /**
@@ -126,7 +150,27 @@ function currHour(elapsedMinutes) {
  * @return {number []} the number coins with the given denomination that can fit in the input cents, and the number of remaining cents
  */
 function calcCoins(denomination, cents) {
-    /* write your code here! */
+    let coinValue = 0;
+
+    if (denomination === "quarters") {
+        coinValue = 25;
+    } else if (denomination === "dimes") {
+        coinValue = 10;
+    } else if (denomination === "nickels") {
+        coinValue = 5;
+    } else {
+        return [0, cents];
+    }
+
+    let count = 0;
+    let remaining = cents;
+
+    while (remaining >= coinValue) {
+        remaining -= coinValue;
+        count++;
+    }
+
+    return [count, remaining];
 }
 
 //uncomment the line below to run the lab4 functions with vitest!!
